@@ -18,3 +18,22 @@ $ jq -r '.[] | select(.title == "相思") | .contents + " by " + .author' 300.js
 ## 数据来源
 
 http://www.shiku.org/shiku/gs/tangdai.htm
+
+## Long Live the Emacs
+
+李白《长干行》
+
+    M-x @300 李白 长干行
+
+随机一首诗
+
+    M-x @300-random
+
+更多随机
+
+    ;; 随机一首诗
+    (seq-random-elt (@300-filter nil nil nil))
+    ;; 随机一首李白的诗
+    (seq-random-elt (@300-filter "李白" nil nil))
+    ;; 随机一首五言绝句
+    (seq-random-elt (@300-filter nil nil "五言绝句"))

@@ -48,6 +48,7 @@
             (json-read-file @300-json))))
   @300-alists)
 
+;;;###autoload
 (defun @300-filter (author title type)
   (seq-filter (lambda (alist)
                 (and (if author
@@ -104,9 +105,11 @@
     (@300-display-buffer alist)))
 
 ;;;###autoload
-(defun @300-random (author title type)
+(defun @300-random (&optional author title type)
+  (interactive)
   (when-let ((filtered (@300-filter author title type)))
-    (seq-random-elt filtered)))
+    (let-alist (seq-random-elt filtered)
+      (@300 .author .title))))
 
 (provide '@300)
 ;;; @300.el ends here
