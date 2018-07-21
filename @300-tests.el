@@ -1,0 +1,37 @@
+;;; @300-tests.el --- Tests of @300.el               -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2018  Xu Chunyang
+
+;; Author: Xu Chunyang <mail@xuchunyang.me>
+;; Keywords:
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;
+
+;;; Code:
+
+(require 'ert)
+(require '@300)
+
+(ert-deftest @300 ()
+  (should (@300-get-alists))
+  (should (string-prefix-p
+           "国破山河在，城春草木深。"
+           (alist-get 'contents (car (@300-filter-by-author+title "杜甫" "春望"))))))
+
+(provide '@300-tests)
+;;; @300-tests.el ends here
