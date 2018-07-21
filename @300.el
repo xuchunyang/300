@@ -3,8 +3,10 @@
 ;; Copyright (C) 2018  Xu Chunyang
 
 ;; Author: Xu Chunyang <mail@xuchunyang.me>
+;; URL: https://github.com/xuchunyang/300
 ;; Package-Requires: ((emacs "25"))
-;; Keywords: 
+;; Created: Sat Jul 21 14:19:22 CST 2018
+;; Version: 2018.07.21
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -46,16 +48,24 @@
             (json-read-file @300-json))))
   @300-alists)
 
-(defun @300-filter-by-author (author)
+(defun @300-filter (author title type)
   (seq-filter (lambda (alist)
-                (equal (alist-get 'author alist) author))
+                (and (if author
+                         (equal (alist-get 'author alist) author)
+                       t)
+                     (if title
+                         (equal (alist-get 'title alist) title)
+                       t)
+                     (if type
+                         (equal (alist-get 'type alist) type)
+                       t)))
               (@300-get-alists)))
 
+(defun @300-filter-by-author (author)
+  (@300-filter author nil nil))
+
 (defun @300-filter-by-author+title (author title)
-  (seq-filter (lambda (alist)
-                (and (equal (alist-get 'author alist) author)
-                     (equal (alist-get 'title alist) title)))
-              (@300-get-alists)))
+  (@300-filter author title nil))
 
 (defun @300-display-buffer (alist)
   (with-current-buffer (get-buffer-create "*唐诗三百首*")
@@ -92,6 +102,11 @@
   (interactive (@300-completing-read-author+title))
   (when-let ((alist (car (@300-filter-by-author+title author title))))
     (@300-display-buffer alist)))
+
+;;;###autoload
+(defun @300-random (author title type)
+  (when-let ((filtered (@300-filter author title type)))
+    (seq-random-elt filtered)))
 
 (provide '@300)
 ;;; @300.el ends here

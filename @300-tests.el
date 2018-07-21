@@ -26,12 +26,22 @@
 
 (require 'ert)
 (require '@300)
+(require 'let-alist)
 
-(ert-deftest @300 ()
-  (should (@300-get-alists))
+(ert-deftest @300-get-alists ()
+  (should (@300-get-alists)))
+
+(ert-deftest @300-filter-by-author+title ()
   (should (string-prefix-p
            "国破山河在，城春草木深。"
-           (alist-get 'contents (car (@300-filter-by-author+title "杜甫" "春望"))))))
+           (let-alist (car (@300-filter-by-author+title "杜甫" "春望"))
+             .contents))))
+
+(ert-deftest @300-random ()
+  (should (@300-random nil nil nil))
+  (should-not (@300-random "徐春阳" nil nil))
+  (let-alist (@300-random "陈子昂" nil nil)
+    (should (equal .title "登幽州台歌"))))
 
 (provide '@300-tests)
 ;;; @300-tests.el ends here
